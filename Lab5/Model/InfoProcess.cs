@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,6 +14,8 @@ namespace Lab5Butenko.Model
     {
 
 		#region
+		private PerformanceCounter theCPUCounter;
+		private PerformanceCounter theRAMCounter;
 		private Process _process;
 		private string _name;
 		private int _id;
@@ -219,24 +221,22 @@ namespace Lab5Butenko.Model
 		{
 
 
-
-			PerformanceCounter theCPUCounter = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
+              if(theCPUCounter==null) theCPUCounter = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName);
 				try
 				{
-					theCPUCounter.NextValue();
 			
-					CPU = theCPUCounter.NextValue();
+					CPU = Math.Round((theCPUCounter.NextValue()/Environment.ProcessorCount),3);
 				}
 				catch (Exception)
 				{
 					CPU = 0;
 				}
 			
-			var ram = new PerformanceCounter("Process", "Private Bytes", _process.ProcessName, true);
+			 if(theRAMCounter==null)theRAMCounter = new PerformanceCounter("Process", "Private Bytes", _process.ProcessName, true);
 		
 			try
 			{
-				RAM = Math.Round(ram.NextValue() / 1024 / 1024, 2);
+				RAM = Math.Round(theRAMCounter.NextValue() / 1024 / 1024, 2);
 			}
 			catch (Exception)
 			{
