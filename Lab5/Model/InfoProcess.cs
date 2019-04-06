@@ -195,27 +195,27 @@ namespace Lab5Butenko.Model
 			private string GetTheUserName(){
 
 			string query = "Select * From Win32_Process Where ProcessID = " + Id;
-			ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-			ManagementObjectCollection processList = searcher.Get();
+			ManagementObjectSearcher search = new ManagementObjectSearcher(query);
+			ManagementObjectCollection processList = search.Get();
 			foreach (ManagementObject obj in processList)
 			{
 				string[] args = new string[] { string.Empty, string.Empty };
-				int returnVal = 0;
+				int result = 0;
 				try {
-					returnVal = Convert.ToInt32(obj.InvokeMethod("GetOwner", args));
+					result = Convert.ToInt32(obj.InvokeMethod("GetOwner", args));
 				}
 				catch(Exception )
 				{
-					returnVal = 0;
+					result = 0;
 				}
-				 
-				if (returnVal == 0)
+				
+				if (result == 0)
 				{
 					return args[1] + "\\" + args[0];
 				}
 			}
 
-			return "No owner";
+			return "No user";
 		}
 		private  void GetCPUAndRam()
 		{
